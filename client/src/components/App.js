@@ -15,7 +15,7 @@ function App() {
                     Authorization: `Bearer ${userToken}`,
                 },
             };
-            const response = await axios.get("http://localhost:3001/api/user/authenticateJWT", config);
+            const response = await axios.get("http://localhost:3001/api/user/fetchUser", config);
             setUser(response.data);
             console.log(response.data);
         } catch (error) {
@@ -24,7 +24,6 @@ function App() {
         };
 
         if (userToken) {
-            console.log("token is ",userToken);
             fetchUserFromProtectedAPI(userToken); // Pass userToken as an argument
         }
     }, [userToken]); // Add userToken as a dependency

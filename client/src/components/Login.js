@@ -12,7 +12,8 @@ function Login(props)
 
     const { email, password } = formData;
 
-    const handleChange = (e) => {
+    const handleChange = (e) => 
+    {
         const { name, value } = e.target;
         setFormData({
         ...formData,
@@ -20,14 +21,22 @@ function Login(props)
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => 
+    {
         e.preventDefault();
-        const response = await axios.post('http://localhost:3001/api/users/login', {
-            email,
-            password,
-        });
-        localStorage.setItem('realTimeToken', response.data.token);
-        window.location.reload();
+        try
+        {
+            const response = await axios.post('http://localhost:3001/api/users/login', {
+                email,
+                password,
+            });
+            localStorage.setItem('realTimeToken', response.data.token);
+            window.location.reload();
+        }
+        catch (error) 
+        {
+            console.error('Error logging in:', error);
+        }
     };
 
     return (

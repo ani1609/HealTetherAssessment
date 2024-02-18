@@ -1,4 +1,4 @@
-.loginFormContainer, .signupFormContainer
+.loginFormContainer, .signupFormContainer, .addPostFormContainer
 {
     backdrop-filter: blur(5px);
     opacity: 0;
@@ -20,7 +20,7 @@
     }
 }
 
-.loginFormContainer::before, .signupFormContainer::before
+.loginFormContainer::before, .signupFormContainer::before, .addPostFormContainer::before
 {
     content: '';
     position: absolute;

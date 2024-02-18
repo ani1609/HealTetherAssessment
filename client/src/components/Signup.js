@@ -14,7 +14,8 @@ function Signup(props)
 
     const { name, email, password, cPassword } = formData;
 
-    const handleChange = (e) => {
+    const handleChange = (e) => 
+    {
         const { name, value } = e.target;
         setFormData({
         ...formData,
@@ -22,20 +23,28 @@ function Signup(props)
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => 
+    {
         e.preventDefault();
         if (password!==cPassword)
         {
             console.log("Passwords do not match");
             return;
         }
-        const response = await axios.post('http://localhost:3001/api/users/signup', {
-            name,
-            email,
-            password,
-        });
-        localStorage.setItem('realTimeToken', response.data.token);
-        window.location.reload();
+        try
+        {
+            const response = await axios.post('http://localhost:3001/api/users/signup', {
+                name,
+                email,
+                password,
+            });
+            localStorage.setItem('realTimeToken', response.data.token);
+            window.location.reload();
+        }
+        catch (error) 
+        {
+            console.error('Error creating user:', error);
+        }
     };
 
     return (

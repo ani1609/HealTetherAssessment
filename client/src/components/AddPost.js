@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import {ReactComponent as Close} from "../icons/close.svg";
-import axios from 'axios';
 
 
 function AddPost(props) 
 {
     const [imageData, setImageData] = useState('');
     const [caption, setCaption] = useState('');
+    const [postData, setPostData] = useState({
+        creator: {
+            name: props.user.name,
+            email: props.user.email,
+        },
+        imageData: "",
+        caption: "",
+        likes: 0,
+        comments: [],
+        timeStamp: Date.now(),
+    });
 
     const handleFileChange = (event) => 
     {
@@ -15,15 +25,17 @@ function AddPost(props)
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64data = reader.result;
-            setImageData(base64data);
+            postData.imageData = base64data;
         };
         reader.readAsDataURL(file);
         }
     };
 
-    const handleCaptionChange = (event) => 
-    {
-        setCaption(event.target.value);
+    const handleCaptionChange = (event) => {
+        setPostData((prevData) => ({
+            ...prevData,
+            caption: event.target.value,
+        }));
     };
 
     const handleSubmit = async (event) => 
@@ -40,12 +52,17 @@ function AddPost(props)
             };
 
             // Make a POST request to the backend with imageData, caption, and token
-            const response = await axios.post('http://localhost:3001/api/addPosts',
-                { imageData, caption },
-                { headers }
-            );
+            // const response = await axios.post('http://localhost:3001/api/addPosts',
+            //     { imageData, caption },
+            //     { headers }
+            // );
+            // console.log('Post created:', response.data);
 
-            console.log('Post created:', response.data);
+            // Emit the new post to the server
+            props.socket.emit('newPost', postData);
+            props.socket.emit('newPostNotification', postData);
+
+
             props.setShowAddPostForm(false);
         }
         catch (error) 
@@ -53,6 +70,12 @@ function AddPost(props)
             console.error('Error creating post:', error);
         }
     };
+
+    //Listen for new posts
+    // socket.on('newPost', (postData) => 
+    // {
+    //     console.log('New post:', postData);
+    // });
 
     return (
         <form className="bg-white relative p-8 shadow-md rounded-md w-80" onSubmit={handleSubmit}>
@@ -74,7 +97,7 @@ function AddPost(props)
                 Caption:
                 </label>
                 <textarea
-                value={caption}
+                value={postData.caption}
                 onChange={handleCaptionChange}
                 className="mt-1 p-2 w-full border rounded-md"
                 />

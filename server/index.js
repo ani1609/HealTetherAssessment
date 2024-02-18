@@ -2,6 +2,7 @@ const express = require('express');
 const http=require('http');
 require('dotenv').config();
 const cors = require('cors');
+const{ Server }=require('socket.io');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
 const { addPost, fetchPosts } = require('./controllers/postControllers');
@@ -38,6 +39,39 @@ app.use('/uploads', express.static('uploads'));
 //add post
 app.post('/api/addPosts',authenticateJWT, addPost);
 app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
+
+
+// WebSocket connection handling
+const io=new  Server(server,{
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
+});
+
+io.on('connection', (socket) => 
+{
+    console.log('Client connected');
+
+    // Handle new post
+    socket.on('newPost', (postData) => 
+    {
+        console.log('New post done');
+        io.emit('newPost', postData);
+    });
+
+    //Handle new post notification
+    socket.on('newPostNotification', (postData) => 
+    {
+        console.log('New post notification done');
+        socket.broadcast.emit('newPostNotification', postData);
+    });
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
 
 

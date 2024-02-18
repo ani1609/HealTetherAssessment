@@ -4,7 +4,7 @@ require('dotenv').config();
 const cors = require('cors');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
-const { addPost } = require('./controllers/postControllers');
+const { addPost, fetchPosts } = require('./controllers/postControllers');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
@@ -31,8 +31,14 @@ app.post('/api/users/signup', signup);
 app.post('/api/users/login', login);
 app.get('/api/user/fetchUser', authenticateJWT, getUser);
 
+
+// Serve the static files in the 'uploads' folder
+app.use('/uploads', express.static('uploads'));
+
 //add post
 app.post('/api/addPosts',authenticateJWT, addPost);
+app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
+
 
 
 // Start the server

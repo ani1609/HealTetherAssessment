@@ -6,8 +6,8 @@ function Home(props)
 {
     return (
         <div>
-            <Navbar user={props.user} socket={props.socket}/>
-            <Posts user={props.user} socket={props.socket}/>
+            <Navbar user={props.user} socket={props.socket} setLoading={props.setLoading}/>
+            <Posts user={props.user} socket={props.socket} setLoading={props.setLoading}/>
         </div>
     );
 }

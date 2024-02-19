@@ -26,6 +26,7 @@ function Signup(props)
     const handleSubmit = async (e) => 
     {
         e.preventDefault();
+        props.setLoading(true);
         if (password!==cPassword)
         {
             console.log("Passwords do not match");
@@ -43,6 +44,7 @@ function Signup(props)
         }
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error creating user:', error);
         }
     };

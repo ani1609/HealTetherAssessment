@@ -58,6 +58,7 @@ function Posts(props)
                         post={post} 
                         setPosts={setPosts}
                         socket={props.socket}
+                        setLoading={props.setLoading}
                     />
                 ))}
             </div>

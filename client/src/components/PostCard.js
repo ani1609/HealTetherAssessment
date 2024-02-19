@@ -24,6 +24,7 @@ function PostCard(props)
     {
         try
         {
+            props.setLoading(true);
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -42,9 +43,11 @@ function PostCard(props)
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
 
             socket.emit('likePostNotification', { postData: response.data, roomId: post.creator.personalRoomId, likedBy: user.name });
-        }
+
+            props.setLoading(false);}
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error liking post:', error);
         }
     }
@@ -53,6 +56,7 @@ function PostCard(props)
     {
         try 
         {
+            props.setLoading(true);
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -66,9 +70,11 @@ function PostCard(props)
             );
             console.log('Post shared:', response.data);
             socket.emit('sharePostNotification', { postData: post, roomId: post.creator.personalRoomId, sharedBy: user.name });
+            props.setLoading(false);
         } 
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error sharing post:', error);
         }
     }
@@ -96,7 +102,7 @@ function PostCard(props)
                 </span>
             </div>
             {
-                showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} setPosts={setPosts} socket={props.socket}/></div>
+                showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} setPosts={setPosts} socket={props.socket} setLoading={props.setLoading}/></div>
             }
         </div>
     );

@@ -19,6 +19,7 @@ function Comments(props)
             return;
         try
         {
+            props.setLoading(true);
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -40,9 +41,12 @@ function Comments(props)
             socket.emit('commentPostNotification', { postData: response.data, roomId: post.creator.personalRoomId, commentedBy: user.name });
             
             setComment('');
+
+            props.setLoading(false);
         }
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error adding comment:', error);
         }
     };

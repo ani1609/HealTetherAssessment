@@ -24,6 +24,7 @@ function Login(props)
     const handleSubmit = async (e) => 
     {
         e.preventDefault();
+        props.setLoading(true);
         try
         {
             const response = await axios.post('http://localhost:3001/api/users/login', {
@@ -35,6 +36,7 @@ function Login(props)
         }
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error logging in:', error);
         }
     };

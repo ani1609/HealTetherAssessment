@@ -15,25 +15,29 @@ function Share(props)
     {
         try 
         {
-            // const userToken = localStorage.getItem('realTimeToken'); 
-            // const headers = {
-            //     Authorization: `Bearer ${userToken}`,
-            //     'Content-Type': 'application/json',
-            // };
+            props.setLoading(true);
+            const userToken = localStorage.getItem('realTimeToken'); 
+            const headers = {
+                Authorization: `Bearer ${userToken}`,
+                'Content-Type': 'application/json',
+            };
     
-            // // Make a POST request to the backend with the comment, post ID, and token
-            // const response = await axios.post('http://localhost:3001/api/addComment',
-            //     {
-            //         comment,
-            //         postId: post._id,
-            //     },
-            //     { headers }
-            // );
-            // console.log('Comment added:', response.data);
+            // Make a POST request to the backend with the comment, post ID, and token
+            const response = await axios.post('http://localhost:3001/api/addComment',
+                {
+                    comment,
+                    postId: post._id,
+                },
+                { headers }
+            );
+            console.log('Comment added:', response.data);
             socket.emit('sharePostNotification', { postData: post, roomId: post.creator.personalRoomId, sharedBy: user.name });
+
+            props.setLoading(false);
         } 
         catch (error) 
         {
+            props.setLoading(false);
             console.error('Error sharing post:', error);
         }
     }

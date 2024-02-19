@@ -22,10 +22,25 @@ function PostCard(props)
 
     const handleLikeClick = async () => 
     {
-        try 
+        console.log(post);
+        try
         {
-            socket.emit('likePostNotification', { postData: post, roomId: post.creator.personalRoomId, likedBy: user.name });
-        } 
+            const userToken = localStorage.getItem('realTimeToken'); 
+            const headers = {
+                Authorization: `Bearer ${userToken}`,
+                'Content-Type': 'application/json',
+            };
+    
+            // Make a POST request to the backend with the comment, post ID, and token
+            const response = await axios.post('http://localhost:3001/api/addLike',
+                {
+                    postId: post.postId,
+                },
+                { headers }
+            );
+            console.log('Updated post:', response.data);
+            socket.emit('likePostNotification', { postData: response.data, roomId: post.creator.personalRoomId, likedBy: user.name });
+        }
         catch (error) 
         {
             console.error('Error liking post:', error);

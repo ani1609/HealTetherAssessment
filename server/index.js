@@ -5,7 +5,7 @@ const cors = require('cors');
 const{ Server }=require('socket.io');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
-const { addPost, fetchPosts, addComment, sharePost } = require('./controllers/postControllers');
+const { addPost, fetchPosts, addLike, addComment, sharePost, deleteAllPosts } = require('./controllers/postControllers');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
@@ -20,6 +20,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Connect to MongoDB
 connectDb();
+
+// deleteAllPosts();
 
 //Default route
 app.get('/', (req, res) => 
@@ -39,6 +41,7 @@ app.use('/uploads', express.static('uploads'));
 //add post
 app.post('/api/addPosts',authenticateJWT, addPost);
 app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
+app.post('/api/addLike',authenticateJWT, addLike);
 app.post('/api/addComment',authenticateJWT, addComment);
 app.post('/api/sharePost',authenticateJWT, sharePost);
 

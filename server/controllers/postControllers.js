@@ -7,7 +7,7 @@ const addPost = async (req, res) =>
 {
     try 
     {
-        const { imageData, caption, creator } = req.body;
+        const { imageData, caption, creator, postId } = req.body;
         const user=req.user;
        
         const newPost = new Post({
@@ -17,6 +17,7 @@ const addPost = async (req, res) =>
             likes: 0,
             comments: [],
             timeStamp: Date.now(),
+            postId
         });
 
         const savedPost = await newPost.save();
@@ -119,10 +120,61 @@ const sharePost = async (req, res) =>
     }
 };
 
+const deleteAllPosts = async (req, res) => 
+{
+    try 
+    {
+        await Post.deleteMany({});
+        console.log('All posts deleted');
+    } 
+    catch (error) 
+    {
+        console.error('Error deleting all posts:', error);
+    }
+};
+
+const addLike = async (req, res) => {
+    try {
+        const { postId } = req.body;
+        const user = req.user;
+        console.log(user.email);
+
+        console.log('Add like request:', { postId });
+
+        // Find the post by postId
+        const post = await Post.findOne({ postId: postId });
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Push the new like into the likes array
+        post.likes.push({
+            creator: {
+                name: user.name,
+                email: user.email,
+            },
+            timeStamp: Date.now(),
+        });
+
+        // Save the updated post
+        const updatedPost = await post.save();
+
+        res.status(200).json(updatedPost);
+    } 
+    catch (error) 
+    {
+        console.error('Error adding like:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 
 module.exports = {
     addPost,
     fetchPosts,
+    addLike,
     addComment,
-    sharePost
+    sharePost,
+    deleteAllPosts
 };

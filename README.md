@@ -24,7 +24,7 @@ Before you begin, make sure you have the following software installed on your sy
    - `cd HealTetherAssessment`
 
 3. Install server dependencies. Inside the server folder, run:
-   - `cd ../server`
+   - `cd server`
    - `npm install`
 
 4. Start the server:

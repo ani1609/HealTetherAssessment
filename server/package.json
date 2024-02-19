@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "cross-env MONGO_URI=\"mongodb+srv://rakesh856100:tlnrXtyfEs7aLksE@chatcluster.vfrzsgh.mongodb.net/?retryWrites=true&w=majority\" SECRET_KEY=\"6yCAtdlnX1ucivFv\" SALT=10 nodemon index.js"
+    "dev": "cross-env MONGO_URI=\"mongodb+srv://rakesh856100:1GiAJr7rNJ7Lk6a6@cluster0.9ami4bo.mongodb.net/?retryWrites=true&w=majority\" SECRET_KEY=\"6yCAtdlnX1ucivFv\" SALT=10 PORT=3001 node index.js"
   },
   "keywords": [],
   "author": "",

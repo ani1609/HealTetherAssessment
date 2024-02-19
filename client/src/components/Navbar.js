@@ -71,6 +71,7 @@ function Navbar(props)
 
     const handleLogOut = () =>
     {
+        props.setLoading(true);
         localStorage.removeItem('realTimeToken');
         window.location.reload();
     }
@@ -97,16 +98,16 @@ function Navbar(props)
                 </div>
             </div>
             {showLoginForm&&
-                <div className="loginFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Login setShowLoginForm={setShowLoginForm}/></div>
+                <div className="loginFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Login setShowLoginForm={setShowLoginForm} setLoading={props.setLoading}/></div>
             }
             {showSignupForm&&
-                <div className="signupFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Signup setShowSignupForm={setShowSignupForm}/></div>
+                <div className="signupFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Signup setShowSignupForm={setShowSignupForm} setLoading={props.setLoading}/></div>
             }
             {showAddPostForm&&
-                <div className="addPostFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><AddPost setShowAddPostForm={setShowAddPostForm} user={props.user} socket={props.socket}/></div>
+                <div className="addPostFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><AddPost setShowAddPostForm={setShowAddPostForm} user={props.user} socket={props.socket} setLoading={props.setLoading}/></div>
             }
             {showNotification&&
-                <div className="notificationComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Notifications setShowNotification={setShowNotification} notifications={notifications} setNotifications={setNotifications}/></div>
+                <div className="notificationComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Notifications setShowNotification={setShowNotification} notifications={notifications} setNotifications={setNotifications} setLoading={props.setLoading}/></div>
             }
         </nav>
     );

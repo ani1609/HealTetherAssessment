@@ -43,13 +43,15 @@ const signup = async (req, res) =>
         const salt = await bcrypt.genSalt(Number(SALT));
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
         const newUser = await new User({ ...req.body, password: hashedPassword }).save();
-
-        const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: '5d' });
+        console.log(SALT,SECRET_KEY);
+        const token = jwt.sign({ id: newUser._id }, SECRET_KEY, { expiresIn: '7d' });
+        console.log("new user created");
         res.status(201).send({token});
 
     }
     catch (error) 
     {
+        console.log(error);
         return res.status(500).send({ message: "Internal Server Error" });
     }
 };

@@ -11,10 +11,15 @@ function App()
     const userToken = localStorage.getItem("realTimeToken");
     const [user, setUser] = useState([]);
     const [roomId, setRoomId] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => 
     {
+        if (userToken)
+        {
+            console.log('User token:', userToken);
+        }
         const fetchUserFromProtectedAPI = async (userToken) => {
         try 
         {
@@ -63,7 +68,13 @@ function App()
 
     return (
         <div className="App">
-            <Home user={user} socket={socket}/>
+            {loading ? (
+                <div className="fullscreen-loading">
+                    <div className="spinner"></div>
+                </div>
+            ) : (
+                <Home user={user} socket={socket} setLoading={setLoading} />
+            )}
         </div>
     );
 }

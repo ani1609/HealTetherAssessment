@@ -32,7 +32,7 @@ Before you begin, make sure you have the following software installed on your sy
    - `The server will start at localhost:3001`
 
 6. Install client dependencies. In the project root directory, navigate to the client folder:
-   - `cd ../client`
+   - `Now open HealTetherAssessment folder from another terminal and navigate into the client folder bu running the comman 'cd client'`
    - `npm install`
 
 7. Start the client application:

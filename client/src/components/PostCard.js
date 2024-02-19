@@ -10,7 +10,7 @@ import axios from 'axios';
 
 function PostCard(props) 
 {
-    const {user, post, socket} = props;
+    const {user, post, setPosts, socket} = props;
     const [showComments, setShowComments] = useState(false);
 
 
@@ -22,7 +22,6 @@ function PostCard(props)
 
     const handleLikeClick = async () => 
     {
-        console.log(post);
         try
         {
             const userToken = localStorage.getItem('realTimeToken'); 
@@ -39,6 +38,9 @@ function PostCard(props)
                 { headers }
             );
             console.log('Updated post:', response.data);
+
+            setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
+
             socket.emit('likePostNotification', { postData: response.data, roomId: post.creator.personalRoomId, likedBy: user.name });
         }
         catch (error) 
@@ -84,17 +86,17 @@ function PostCard(props)
             <img src={post.imageData} alt="post" className="w-full h-60 object-cover mt-1" />
             <div className="flex justify-between items-center cursor-pointer mt-1">
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleLikeClick}>
-                    <LikeIcon className="h-6 w-6"/> <p className="text-xs">Like</p>
+                    <LikeIcon className="h-6 w-6"/> <p className="text-xs">{post.likes.length} Like</p>
                 </span>
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={()=>setShowComments(true)}>
-                    <CommentIcon className="h-5 w-5"/> <p className="text-xs">Comment</p>
+                    <CommentIcon className="h-5 w-5"/> <p className="text-xs">{post.comments.length} Comment</p>
                 </span>
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleShareClick}>
                     <ShareIcon className="h-5 w-5"/> <p className="text-xs">Share</p>
                 </span>
             </div>
             {
-                showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} socket={props.socket}/></div>
+                showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} setPosts={setPosts} socket={props.socket}/></div>
             }
         </div>
     );

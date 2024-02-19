@@ -52,10 +52,11 @@ function Posts(props)
         <div className='posts-container'>
             <h1 className='font-bold text-3xl text-center mt-4 mb-4'>Posts</h1>
             <div className='post-wrapper flex flex-col justify-center items-center gap-3 max-w-sm w-screen mx-auto border'>
-                {posts.map((post,index) => (
+                {posts.length>0 && posts.map((post,index) => (
                     <PostCard key={index}
                         user={props.user}
                         post={post} 
+                        setPosts={setPosts}
                         socket={props.socket}
                     />
                 ))}

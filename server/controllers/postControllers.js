@@ -51,28 +51,73 @@ const fetchPosts = async (req, res) =>
     }
 };
 
+const addLike = async (req, res) => {
+    try {
+        const { postId } = req.body;
+        const user = req.user;
+        console.log(user.email);
+
+        console.log('Add like request:', { postId });
+
+        // Find the post by postId
+        const post = await Post.findOne({ postId: postId });
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Push the new like into the likes array
+        post.likes.push({
+            creator: {
+                name: user.name,
+                email: user.email,
+            },
+            timeStamp: Date.now(),
+        });
+
+        // Save the updated post
+        const updatedPost = await post.save();
+
+        res.status(200).json(updatedPost);
+    } 
+    catch (error) 
+    {
+        console.error('Error adding like:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
 const addComment = async (req, res) => 
 {
     try 
     {
-        const { comment, postId } = req.body;
+        const { content, postId } = req.body;
         const user=req.user;
 
-        console.log('Add comment request:', { comment, postId });
+        console.log('Add comment request:', { content, postId });
 
-        const sharedPost = await Post.findByIdAndUpdate(
-            postId,
-            { $push: { comments: comment } },
-            { new: true }
-        );
+       // Find the post by postId
+       const post = await Post.findOne({ postId: postId });
 
-        await User.findByIdAndUpdate(
-            user._id,
-            { $push: { posts: sharedPost._id } },
-            { new: true }
-        );
+         if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
 
-        res.status(201).json(sharedPost);
+        // Push the new comment into the comments array
+        post.comments.push({
+            content,
+            creator: {
+                name: user.name,
+                email: user.email,
+            },
+            timeStamp: Date.now(),
+        });
+
+        // Save the updated post
+        const updatedPost = await post.save();
+
+        res.status(201).json(updatedPost);
     } 
     catch (error) 
     {
@@ -130,42 +175,6 @@ const deleteAllPosts = async (req, res) =>
     catch (error) 
     {
         console.error('Error deleting all posts:', error);
-    }
-};
-
-const addLike = async (req, res) => {
-    try {
-        const { postId } = req.body;
-        const user = req.user;
-        console.log(user.email);
-
-        console.log('Add like request:', { postId });
-
-        // Find the post by postId
-        const post = await Post.findOne({ postId: postId });
-
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
-        }
-
-        // Push the new like into the likes array
-        post.likes.push({
-            creator: {
-                name: user.name,
-                email: user.email,
-            },
-            timeStamp: Date.now(),
-        });
-
-        // Save the updated post
-        const updatedPost = await post.save();
-
-        res.status(200).json(updatedPost);
-    } 
-    catch (error) 
-    {
-        console.error('Error adding like:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

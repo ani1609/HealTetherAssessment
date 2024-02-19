@@ -28,7 +28,7 @@ Before you begin, make sure you have the following software installed on your sy
    - `npm install`
 
 4. Start the server:
-   - `nodemon server`
+   - `node index.js`
    - `The server will start at localhost:3001`
 
 6. Install client dependencies. In the project root directory, navigate to the client folder:

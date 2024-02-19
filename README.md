@@ -1,6 +1,6 @@
 # HealTetherAssessment
 
-This repository contains both the client and server components of the project.
+I have tried to build a social media clone with the basic functionalities such as posting, liking the posts, commenting on the posts, sharing the posts. And all this has been done on top of MERN Stack and have used socket.io for realtime data transmissions and notifiacation alerts for th users.
 
 ## Getting Started
 

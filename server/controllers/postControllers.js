@@ -1,13 +1,14 @@
 const { Post } = require('../models/post');
 const { User } = require('../models/user');
 require('dotenv').config();
+const { v4: uuidv4 } = require('uuid');
 
 
 const addPost = async (req, res) => 
 {
     try 
     {
-        const { imageData, caption, creator } = req.body;
+        const { imageData, caption, creator, postId } = req.body;
         const user=req.user;
        
         const newPost = new Post({
@@ -17,6 +18,7 @@ const addPost = async (req, res) =>
             likes: 0,
             comments: [],
             timeStamp: Date.now(),
+            postId
         });
 
         const savedPost = await newPost.save();
@@ -50,28 +52,73 @@ const fetchPosts = async (req, res) =>
     }
 };
 
+const addLike = async (req, res) => {
+    try {
+        const { postId } = req.body;
+        const user = req.user;
+        console.log(user.email);
+
+        console.log('Add like request:', { postId });
+
+        // Find the post by postId
+        const post = await Post.findOne({ postId: postId });
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Push the new like into the likes array
+        post.likes.push({
+            creator: {
+                name: user.name,
+                email: user.email,
+            },
+            timeStamp: Date.now(),
+        });
+
+        // Save the updated post
+        const updatedPost = await post.save();
+
+        res.status(200).json(updatedPost);
+    } 
+    catch (error) 
+    {
+        console.error('Error adding like:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+
 const addComment = async (req, res) => 
 {
     try 
     {
-        const { comment, postId } = req.body;
+        const { content, postId } = req.body;
         const user=req.user;
 
-        console.log('Add comment request:', { comment, postId });
+        console.log('Add comment request:', { content, postId });
 
-        const sharedPost = await Post.findByIdAndUpdate(
-            postId,
-            { $push: { comments: comment } },
-            { new: true }
-        );
+       // Find the post by postId
+       const post = await Post.findOne({ postId: postId });
 
-        await User.findByIdAndUpdate(
-            user._id,
-            { $push: { posts: sharedPost._id } },
-            { new: true }
-        );
+         if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
 
-        res.status(201).json(sharedPost);
+        // Push the new comment into the comments array
+        post.comments.push({
+            content,
+            creator: {
+                name: user.name,
+                email: user.email,
+            },
+            timeStamp: Date.now(),
+        });
+
+        // Save the updated post
+        const updatedPost = await post.save();
+
+        res.status(201).json(updatedPost);
     } 
     catch (error) 
     {
@@ -84,33 +131,28 @@ const sharePost = async (req, res) =>
 {
     try 
     {
-        const post = req.body;
+        const postData = req.body;
         const user=req.user;
-
-        console.log('Share post request:', post);
+        const randomUUID = uuidv4();
 
         const newPost = new Post({
-            creator: {
+            creator: 
+            {
                 name: user.name,
                 email: user.email,
-                personalRoomId: user._id
+                personalRoomId: user._id,
             },
-            imageData: post.imageData,
-            caption: post.caption,
+            imageData: postData.imageData,
+            caption: postData.caption,
             likes: 0,
             comments: [],
             timeStamp: Date.now(),
+            postId: randomUUID,
         });
 
-        const savedPost = await newPost.save();
+        const sharedPost = await newPost.save();
 
-        await User.findByIdAndUpdate(
-            user._id,
-            { $push: { posts: savedPost._id } },
-            { new: true }
-        );
-
-        res.status(200).json(savedPost);
+        res.status(200).json(sharedPost);
     } 
     catch (error) 
     {
@@ -119,10 +161,25 @@ const sharePost = async (req, res) =>
     }
 };
 
+const deleteAllPosts = async (req, res) => 
+{
+    try 
+    {
+        await Post.deleteMany({});
+        console.log('All posts deleted');
+    } 
+    catch (error) 
+    {
+        console.error('Error deleting all posts:', error);
+    }
+};
+
 
 module.exports = {
     addPost,
     fetchPosts,
+    addLike,
     addComment,
-    sharePost
+    sharePost,
+    deleteAllPosts
 };

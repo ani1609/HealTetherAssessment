@@ -9,19 +9,14 @@ import {ReactComponent as SendIcon} from "../icons/send.svg";
 
 function Comments(props)
 {
-    const { post, socket, user } = props;
-    const [comment, setComment] = useState({
-        content: "",
-        creator: {
-            name: props.user.name,
-            email: props.user.email
-        },
-        timeStamp: Date.now(),
-    });
+    const { post, setPosts, socket, user } = props;
+    const [comment, setComment] = useState('');
 
     const handleAddComment = async (event) => 
     {
         event.preventDefault();
+        if (comment === '') 
+            return;
         try
         {
             const userToken = localStorage.getItem('realTimeToken'); 
@@ -33,20 +28,18 @@ function Comments(props)
             // Make a POST request to the backend with the comment, post ID, and token
             const response = await axios.post('http://localhost:3001/api/addComment',
                 {
-                    comment,
-                    postId: post._id,
+                    content: comment,
+                    postId: post.postId,
                 },
                 { headers }
             );
             console.log('Comment added:', response.data);
-            // Create a copy of post.comments and add the new comment
-            post.comments.push(comment);
-            // Clear the input field after adding the comment
-            setComment({ content: '', creator: comment.creator, timeStamp: Date.now() });
 
-            // Emit new comment to the server
-            socket.emit('commentPostNotification', { postData: post, roomId: post.creator.personalRoomId, commentedBy: user.name });
-
+            setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
+        
+            socket.emit('commentPostNotification', { postData: response.data, roomId: post.creator.personalRoomId, commentedBy: user.name });
+            
+            setComment('');
         }
         catch (error) 
         {
@@ -69,8 +62,8 @@ function Comments(props)
                     type="text" 
                     className="border rounded-md p-2 box-border" 
                     placeholder="Add a comment"
-                    value={comment.content}
-                    onChange={(e) => setComment({ ...comment, content: e.target.value })}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
                     name="comment"
                     autoComplete='off'
                 />

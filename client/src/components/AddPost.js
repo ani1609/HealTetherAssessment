@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {ReactComponent as Close} from "../icons/close.svg";
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 
 function AddPost(props) 
@@ -16,6 +17,7 @@ function AddPost(props)
         likes: 0,
         comments: [],
         timeStamp: Date.now(),
+        postId: uuidv4(),
     });
 
     const handleFileChange = (event) => 

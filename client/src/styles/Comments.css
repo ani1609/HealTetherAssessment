@@ -1,0 +1,16 @@
+.comments-container form 
+{
+    left: 32px;
+    bottom: 32px;
+    width: calc(100% - 64px);
+}
+
+.comments-container form input
+{
+    flex: 4;
+}
+
+.comments-container form button
+{
+    flex: 1;
+}

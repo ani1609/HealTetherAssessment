@@ -6,15 +6,16 @@ const addPost = async (req, res) =>
 {
     try 
     {
-        const { imageData, caption } = req.body;
-        const user = req.user;
-
-        const { name, email } = user;
-
+        const { imageData, caption, creator } = req.body;
+        const user=req.user;
+       
         const newPost = new Post({
-            creator: { name, email },
+            creator: creator, // Use the creator directly
             imageData,
             caption,
+            likes: 0,
+            comments: [],
+            timeStamp: Date.now(),
         });
 
         const savedPost = await newPost.save();
@@ -48,8 +49,32 @@ const fetchPosts = async (req, res) =>
     }
 };
 
+const addComment = async (req, res) => 
+{
+    try 
+    {
+        const { comment, postId } = req.body;
+
+        console.log('Add comment request:', { comment, postId });
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            postId,
+            { $push: { comments: comment } },
+            { new: true }
+        );
+
+        res.status(201).json(updatedPost);
+    } 
+    catch (error) 
+    {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 
 module.exports = {
     addPost,
     fetchPosts,
+    addComment,
 };

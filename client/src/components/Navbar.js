@@ -13,7 +13,7 @@ function Navbar(props)
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(false);
     const [showAddPostForm, setShowAddPostForm] = useState(false);
-    const [showNotificationComponent, setShowNotificationComponent] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
     const [notifications, setNotifications] = useState([]);
 
     //Listen for new posts
@@ -69,7 +69,7 @@ function Navbar(props)
                 <div className="flex">
                     {userToken ? (
                         <ul className="flex space-x-4">
-                            <li className="text-white cursor-pointer" onClick={()=>setShowNotificationComponent(true)}>Notificaitons</li>
+                            <li className="text-white cursor-pointer" onClick={()=>setShowNotification(true)}>Notificaitons</li>
                             <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}>New Post</li>
                             <li className="text-white cursor-pointer" onClick={handleLogOut}>Logout</li>
                         </ul>
@@ -90,8 +90,8 @@ function Navbar(props)
             {showAddPostForm&&
                 <div className="addPostFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><AddPost setShowAddPostForm={setShowAddPostForm} user={props.user} socket={props.socket}/></div>
             }
-            {showNotificationComponent&&
-                <div className="notificationComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Notifications setShowNotificationComponent={setShowNotificationComponent} notifications={notifications} setNotifications={setNotifications}/></div>
+            {showNotification&&
+                <div className="notificationComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Notifications setShowNotification={setShowNotification} notifications={notifications} setNotifications={setNotifications}/></div>
             }
         </nav>
     );

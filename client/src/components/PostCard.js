@@ -1,12 +1,18 @@
+import { useState } from "react";
 import "../index.css";
-import {ReactComponent as Like} from "../icons/like.svg";
-import {ReactComponent as Comment} from "../icons/comment.svg";
-import {ReactComponent as Share} from "../icons/share.svg";
+import "../styles/PostCard.css";
+import {ReactComponent as LikeIcon} from "../icons/like.svg";
+import {ReactComponent as CommentIcon} from "../icons/comment.svg";
+import {ReactComponent as ShareIcon} from "../icons/share.svg";
+import Comments from "./Comments";
 
 
 function PostCard(props) 
 {
     const {user, post, socket} = props;
+    const [showComments, setShowComments] = useState(false);
+
+
     function formatTimestamp(timestamp) {
         const options = { day: '2-digit', month: 'short', year: 'numeric' };
         const formattedDate = new Date(timestamp).toLocaleDateString('en-US', options);
@@ -15,6 +21,7 @@ function PostCard(props)
 
     const handleLikeClick = async () => 
     {
+        console.log('Liking post:', post);
         try 
         {
             socket.emit('likePostNotification', { postData: post, roomId: post.creator.personalRoomId, likedBy: user.name });
@@ -38,15 +45,17 @@ function PostCard(props)
             <img src={post.imageData} alt="post" className="w-full h-60 object-cover mt-1" />
             <div className="flex justify-between items-center cursor-pointer mt-1">
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleLikeClick}>
-                    <Like className="h-6 w-6"/> <p className="text-xs">Like</p>
+                    <LikeIcon className="h-6 w-6"/> <p className="text-xs">Like</p>
+                </span>
+                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={()=>setShowComments(true)}>
+                    <CommentIcon className="h-5 w-5"/> <p className="text-xs">Comment</p>
                 </span>
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
-                    <Comment className="h-5 w-5"/> <p className="text-xs">Comment</p>
-                </span>
-                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
-                    <Share className="h-5 w-5"/> <p className="text-xs">Share</p>
+                    <ShareIcon className="h-5 w-5"/> <p className="text-xs">Share</p>
                 </span>
             </div>
+            {showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post}/></div>
+}
         </div>
     );
 }

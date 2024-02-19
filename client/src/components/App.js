@@ -51,8 +51,6 @@ function App()
     {
         const handleJoinRoom = (message) => {
             console.log('Received joinRoom message:', message);
-            console.log('Joined rooms: ', socket.rooms);
-            console.log('Joined rooms: ', socket.id);
         };
 
         socket.on('joinRoom', handleJoinRoom);

@@ -1,0 +1,32 @@
+.commentsComponentContainer
+{
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn
+{
+    0%
+    {
+        opacity: 0;
+    }
+
+    100%
+    {
+        opacity: 1;
+    }
+}
+
+commentsComponentContainer::before
+{
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(24, 24, 24, 0.5);
+    z-index: -1;
+}
+

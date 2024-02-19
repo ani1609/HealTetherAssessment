@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {ReactComponent as Close} from "../icons/close.svg";
+import axios from 'axios';
 
 
 function AddPost(props) 
 {
-    const [imageData, setImageData] = useState('');
-    const [caption, setCaption] = useState('');
     const [postData, setPostData] = useState({
         creator: {
             name: props.user.name,
@@ -52,12 +51,14 @@ function AddPost(props)
                 'Content-Type': 'application/json',
             };
 
+            console.log('Post data:', postData);
+
             // Make a POST request to the backend with imageData, caption, and token
-            // const response = await axios.post('http://localhost:3001/api/addPosts',
-            //     { imageData, caption },
-            //     { headers }
-            // );
-            // console.log('Post created:', response.data);
+            const response = await axios.post('http://localhost:3001/api/addPosts',
+                postData,
+                { headers }
+            );
+            console.log('Post created:', response.data);
 
             // Emit the new post to the server
             props.socket.emit('newPost', postData);

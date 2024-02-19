@@ -5,6 +5,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import AddPost from "./AddPost";
 import Notifications from "./Notifications";
+import {ReactComponent as BellIcon} from "../icons/bell.svg";
 
 
 function Navbar(props)
@@ -82,8 +83,8 @@ function Navbar(props)
                 <div className="text-white font-bold text-xl">HealTether</div>
                 <div className="flex">
                     {userToken ? (
-                        <ul className="flex space-x-4">
-                            <li className="text-white cursor-pointer" onClick={()=>setShowNotification(true)}>Notificaitons</li>
+                        <ul className="flex jsutify-center items-center space-x-4">
+                            <li className="text-white cursor-pointer relative" onClick={()=>setShowNotification(true)}>{notifications.length > 0 && <span className="dot"></span>}<BellIcon className="fill-white w-10"/></li>
                             <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}>New Post</li>
                             <li className="text-white cursor-pointer" onClick={handleLogOut}>Logout</li>
                         </ul>

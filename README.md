@@ -17,10 +17,10 @@ Before you begin, make sure you have the following software installed on your sy
 ### Installing and running the porject
 
 1. Clone this repository to your local machine:
-   - `git clone https://github.com/ani1609/Conversify.git`
+   - `git clone https://github.com/ani1609/HealTetherAssessment.git`
 
 2. Navigate to the project directory:
-   - `cd Conversify`
+   - `cd HealTetherAssessment`
 
 3. Install server dependencies. Inside the server folder, run:
    - `cd ../server`

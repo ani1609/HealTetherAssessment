@@ -21,7 +21,6 @@ function PostCard(props)
 
     const handleLikeClick = async () => 
     {
-        console.log('Liking post:', post);
         try 
         {
             socket.emit('likePostNotification', { postData: post, roomId: post.creator.personalRoomId, likedBy: user.name });
@@ -54,7 +53,7 @@ function PostCard(props)
                     <ShareIcon className="h-5 w-5"/> <p className="text-xs">Share</p>
                 </span>
             </div>
-            {showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post}/></div>
+            {showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} socket={props.socket}/></div>
 }
         </div>
     );

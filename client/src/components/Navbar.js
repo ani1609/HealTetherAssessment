@@ -19,6 +19,7 @@ function Navbar(props)
     //Listen for new posts
     useEffect(() => 
     {
+        //Listen for new posts
         const handleNewPost = (postData) => 
         {
             console.log('New post:', postData);
@@ -26,33 +27,34 @@ function Navbar(props)
             setNotifications((prevNotifications) => [notification, ...prevNotifications]);
         };
 
-        props.socket.on('newPostNotification', handleNewPost);
-
-    
-        return () => {
-            props.socket.off('newPostNotification', handleNewPost);
-        };
-    }, [props.socket]);
-
-    //Listen for new likes
-    useEffect(() => 
-    {
-        // console.log('Listening for new likes');
+        //Listen for new likes
         const handlePostLike = (postData) => {
             console.log('New like:', postData);
 
             const notification = `${postData.likedBy} liked your post`;
             setNotifications((prevNotifications) => [notification, ...prevNotifications]);
         }
-    
+
+        //Listen for new comments
+        const handlePostComment = (postData) => {
+            console.log('New comment:', postData);
+
+            const notification = `${postData.commentedBy} commented on your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+
+        props.socket.on('newPostNotification', handleNewPost);
         props.socket.on('likePostNotification', handlePostLike);
+        props.socket.on('commentPostNotification', handlePostComment);
 
-
+    
         return () => {
+            props.socket.off('newPostNotification', handleNewPost);
             props.socket.off('likePostNotification', handlePostLike);
+            props.socket.off('commentPostNotification', handlePostComment);
         };
     }, [props.socket]);
-    
+
 
     const handleLogOut = () =>
     {

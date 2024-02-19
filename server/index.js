@@ -84,13 +84,22 @@ io.on('connection', (socket) =>
         socket.broadcast.emit('newPostNotification', postData);
     });
 
-    //Handle post like
+    //Handle post like notification
     socket.on('likePostNotification', (postData) => 
     {
         const roomId = postData.roomId;
         console.log('Received like for post with roomId:', roomId);
         console.log(postData.likedBy);
         socket.broadcast.to(roomId).emit('likePostNotification', postData);
+    });
+
+    //Handle new comment notification
+    socket.on('commentPostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        console.log('Received new comment for post with roomId:', roomId);
+        socket.broadcast.to(roomId).emit('commentPostNotification', postData);
+        console.log(postData);
     });
 
 

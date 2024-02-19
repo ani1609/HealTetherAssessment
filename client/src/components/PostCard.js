@@ -4,12 +4,25 @@ import {ReactComponent as Comment} from "../icons/comment.svg";
 import {ReactComponent as Share} from "../icons/share.svg";
 
 
-function PostCard({ post }) 
+function PostCard(props) 
 {
+    const {user, post, socket} = props;
     function formatTimestamp(timestamp) {
         const options = { day: '2-digit', month: 'short', year: 'numeric' };
         const formattedDate = new Date(timestamp).toLocaleDateString('en-US', options);
         return formattedDate;
+    }
+
+    const handleLikeClick = async () => 
+    {
+        try 
+        {
+            socket.emit('likePostNotification', { postData: post, roomId: post.creator.personalRoomId, likedBy: user.name });
+        } 
+        catch (error) 
+        {
+            console.error('Error liking post:', error);
+        }
     }
 
     return (
@@ -24,7 +37,7 @@ function PostCard({ post })
             <p className="box-border px-2 text-base">{post.caption}</p>
             <img src={post.imageData} alt="post" className="w-full h-60 object-cover mt-1" />
             <div className="flex justify-between items-center cursor-pointer mt-1">
-                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
+                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleLikeClick}>
                     <Like className="h-6 w-6"/> <p className="text-xs">Like</p>
                 </span>
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>

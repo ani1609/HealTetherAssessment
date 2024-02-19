@@ -5,7 +5,6 @@ import Login from "./Login";
 import Signup from "./Signup";
 import AddPost from "./AddPost";
 import Notifications from "./Notifications";
-import { set } from "mongoose";
 
 
 function Navbar(props)
@@ -20,18 +19,40 @@ function Navbar(props)
     //Listen for new posts
     useEffect(() => 
     {
-        const handleNewPost = (postData) => {
+        const handleNewPost = (postData) => 
+        {
             console.log('New post:', postData);
             let notification="New post from "+postData.creator.name.split(" ")[0];
             setNotifications((prevNotifications) => [notification, ...prevNotifications]);
         };
-    
+
         props.socket.on('newPostNotification', handleNewPost);
+
     
         return () => {
             props.socket.off('newPostNotification', handleNewPost);
         };
     }, [props.socket]);
+
+    //Listen for new likes
+    useEffect(() => 
+    {
+        // console.log('Listening for new likes');
+        const handlePostLike = (postData) => {
+            console.log('New like:', postData);
+
+            const notification = `${postData.likedBy} liked your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+    
+        props.socket.on('likePostNotification', handlePostLike);
+
+
+        return () => {
+            props.socket.off('likePostNotification', handlePostLike);
+        };
+    }, [props.socket]);
+    
 
     const handleLogOut = () =>
     {

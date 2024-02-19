@@ -10,6 +10,7 @@ function AddPost(props)
         creator: {
             name: props.user.name,
             email: props.user.email,
+            personalRoomId: props.user._id,
         },
         imageData: "",
         caption: "",

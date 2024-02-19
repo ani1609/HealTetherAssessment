@@ -53,6 +53,22 @@ io.on('connection', (socket) =>
 {
     console.log('Client connected');
 
+    socket.on('joinRoom', (roomId) => {
+        try
+        {
+            // Join the new room
+            socket.join(roomId);
+
+            // Emit a message to the room when a user joins
+            io.to(roomId).emit('joinRoom', { message: `Joined room ${roomId}` });
+            console.log(`Socket ${socket.id} joined room ${roomId}`);
+        }
+        catch(error)
+        {
+            console.log('Error joining room',error);
+        }
+    });
+
     // Handle new post
     socket.on('newPost', (postData) => 
     {
@@ -66,6 +82,16 @@ io.on('connection', (socket) =>
         console.log('New post notification done');
         socket.broadcast.emit('newPostNotification', postData);
     });
+
+    //Handle post like
+    socket.on('likePostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        console.log('Received like for post with roomId:', roomId);
+        console.log(postData.likedBy);
+        socket.broadcast.to(roomId).emit('likePostNotification', postData);
+    });
+
 
     // Handle disconnection
     socket.on('disconnect', () => {

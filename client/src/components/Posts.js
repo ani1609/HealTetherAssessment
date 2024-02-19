@@ -22,7 +22,7 @@ function Posts(props)
                 },
             });
             setPosts(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } 
         catch (error) 
         {
@@ -53,7 +53,11 @@ function Posts(props)
             <h1 className='font-bold text-3xl text-center mt-4 mb-4'>Posts</h1>
             <div className='post-wrapper flex flex-col justify-center items-center gap-3 max-w-sm w-screen mx-auto border'>
                 {posts.map((post,index) => (
-                    <PostCard key={index} post={post} />
+                    <PostCard key={index}
+                        user={props.user}
+                        post={post} 
+                        socket={props.socket}
+                    />
                 ))}
             </div>
         </div>

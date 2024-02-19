@@ -5,7 +5,7 @@ const cors = require('cors');
 const{ Server }=require('socket.io');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
-const { addPost, fetchPosts, addComment } = require('./controllers/postControllers');
+const { addPost, fetchPosts, addComment, sharePost } = require('./controllers/postControllers');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
@@ -40,6 +40,7 @@ app.use('/uploads', express.static('uploads'));
 app.post('/api/addPosts',authenticateJWT, addPost);
 app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
 app.post('/api/addComment',authenticateJWT, addComment);
+app.post('/api/sharePost',authenticateJWT, sharePost);
 
 
 // WebSocket connection handling

@@ -22,8 +22,6 @@ function Comments(props)
     const handleAddComment = async (event) => 
     {
         event.preventDefault();
-        console.log('Adding comment:', post);
-
         try
         {
             const userToken = localStorage.getItem('realTimeToken'); 

@@ -5,6 +5,7 @@ import {ReactComponent as LikeIcon} from "../icons/like.svg";
 import {ReactComponent as CommentIcon} from "../icons/comment.svg";
 import {ReactComponent as ShareIcon} from "../icons/share.svg";
 import Comments from "./Comments";
+import axios from 'axios';
 
 
 function PostCard(props) 
@@ -35,6 +36,18 @@ function PostCard(props)
     {
         try 
         {
+            const userToken = localStorage.getItem('realTimeToken'); 
+            const headers = {
+                Authorization: `Bearer ${userToken}`,
+                'Content-Type': 'application/json',
+            };
+    
+            // Make a POST request to the backend with the comment, post ID, and token
+            const response = await axios.post('http://localhost:3001/api/sharePost',
+                post,
+                { headers }
+            );
+            console.log('Post shared:', response.data);
             socket.emit('sharePostNotification', { postData: post, roomId: post.creator.personalRoomId, sharedBy: user.name });
         } 
         catch (error) 
@@ -65,8 +78,9 @@ function PostCard(props)
                     <ShareIcon className="h-5 w-5"/> <p className="text-xs">Share</p>
                 </span>
             </div>
-            {showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} socket={props.socket}/></div>
-}
+            {
+                showComments && <div className="commentsComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Comments user={props.user} setShowComments={setShowComments} post={post} socket={props.socket}/></div>
+            }
         </div>
     );
 }

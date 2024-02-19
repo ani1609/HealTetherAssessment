@@ -43,15 +43,27 @@ function Navbar(props)
             setNotifications((prevNotifications) => [notification, ...prevNotifications]);
         }
 
+        //Listen for new share posts
+        const handlePostShare = (postData) => {
+            console.log('New share:', postData);
+
+            const notification = `${postData.sharedBy} shared your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+
+
         props.socket.on('newPostNotification', handleNewPost);
         props.socket.on('likePostNotification', handlePostLike);
         props.socket.on('commentPostNotification', handlePostComment);
+        props.socket.on('sharePostNotification', handlePostShare);
+        
 
     
         return () => {
             props.socket.off('newPostNotification', handleNewPost);
             props.socket.off('likePostNotification', handlePostLike);
             props.socket.off('commentPostNotification', handlePostComment);
+            props.socket.off('sharePostNotification', handlePostShare);
         };
     }, [props.socket]);
 

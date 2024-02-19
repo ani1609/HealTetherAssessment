@@ -88,8 +88,6 @@ io.on('connection', (socket) =>
     socket.on('likePostNotification', (postData) => 
     {
         const roomId = postData.roomId;
-        console.log('Received like for post with roomId:', roomId);
-        console.log(postData.likedBy);
         socket.broadcast.to(roomId).emit('likePostNotification', postData);
     });
 
@@ -97,9 +95,14 @@ io.on('connection', (socket) =>
     socket.on('commentPostNotification', (postData) => 
     {
         const roomId = postData.roomId;
-        console.log('Received new comment for post with roomId:', roomId);
         socket.broadcast.to(roomId).emit('commentPostNotification', postData);
-        console.log(postData);
+    });
+
+    //Handle new share notificaion
+    socket.on('sharePostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        socket.broadcast.to(roomId).emit('sharePostNotification', postData);
     });
 
 

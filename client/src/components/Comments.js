@@ -26,21 +26,21 @@ function Comments(props)
 
         try
         {
-            // const userToken = localStorage.getItem('realTimeToken'); 
-            // const headers = {
-            //     Authorization: `Bearer ${userToken}`,
-            //     'Content-Type': 'application/json',
-            // };
+            const userToken = localStorage.getItem('realTimeToken'); 
+            const headers = {
+                Authorization: `Bearer ${userToken}`,
+                'Content-Type': 'application/json',
+            };
     
-            // // Make a POST request to the backend with the comment, post ID, and token
-            // const response = await axios.post('http://localhost:3001/api/addComment',
-            //     {
-            //         comment,
-            //         postId: post._id,
-            //     },
-            //     { headers }
-            // );
-            // console.log('Comment added:', response.data);
+            // Make a POST request to the backend with the comment, post ID, and token
+            const response = await axios.post('http://localhost:3001/api/addComment',
+                {
+                    comment,
+                    postId: post._id,
+                },
+                { headers }
+            );
+            console.log('Comment added:', response.data);
             // Create a copy of post.comments and add the new comment
             post.comments.push(comment);
             // Clear the input field after adding the comment

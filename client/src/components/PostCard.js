@@ -31,6 +31,18 @@ function PostCard(props)
         }
     }
 
+    const handleShareClick = async () =>
+    {
+        try 
+        {
+            socket.emit('sharePostNotification', { postData: post, roomId: post.creator.personalRoomId, sharedBy: user.name });
+        } 
+        catch (error) 
+        {
+            console.error('Error sharing post:', error);
+        }
+    }
+
     return (
         <div className="flex flex-col box-border" style={{width: "100%"}}>
             <div className="flex justify-start gap-x-2 box-border p-2">
@@ -49,7 +61,7 @@ function PostCard(props)
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={()=>setShowComments(true)}>
                     <CommentIcon className="h-5 w-5"/> <p className="text-xs">Comment</p>
                 </span>
-                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
+                <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleShareClick}>
                     <ShareIcon className="h-5 w-5"/> <p className="text-xs">Share</p>
                 </span>
             </div>

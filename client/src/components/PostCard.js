@@ -86,7 +86,7 @@ function PostCard(props)
             <img src={post.imageData} alt="post" className="w-full h-60 object-cover mt-1" />
             <div className="flex justify-between items-center cursor-pointer mt-1">
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={handleLikeClick}>
-                    <LikeIcon className="h-6 w-6"/> <p className="text-xs">{post.likes.length} Like</p>
+                    <LikeIcon className="h-6 w-6"/> <p className="text-xs">{post.likes.length-1 === 0 ? '0 Like' : `${post.likes.length-1} Likes`}</p>
                 </span>
                 <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }} onClick={()=>setShowComments(true)}>
                     <CommentIcon className="h-5 w-5"/> <p className="text-xs">{post.comments.length} Comment</p>

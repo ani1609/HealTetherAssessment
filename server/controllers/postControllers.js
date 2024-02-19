@@ -1,6 +1,7 @@
 const { Post } = require('../models/post');
 const { User } = require('../models/user');
 require('dotenv').config();
+const { v4: uuidv4 } = require('uuid');
 
 
 const addPost = async (req, res) => 
@@ -130,33 +131,28 @@ const sharePost = async (req, res) =>
 {
     try 
     {
-        const post = req.body;
+        const postData = req.body;
         const user=req.user;
-
-        console.log('Share post request:', post);
+        const randomUUID = uuidv4();
 
         const newPost = new Post({
-            creator: {
+            creator: 
+            {
                 name: user.name,
                 email: user.email,
-                personalRoomId: user._id
+                personalRoomId: user._id,
             },
-            imageData: post.imageData,
-            caption: post.caption,
+            imageData: postData.imageData,
+            caption: postData.caption,
             likes: 0,
             comments: [],
             timeStamp: Date.now(),
+            postId: randomUUID,
         });
 
-        const savedPost = await newPost.save();
+        const sharedPost = await newPost.save();
 
-        await User.findByIdAndUpdate(
-            user._id,
-            { $push: { posts: savedPost._id } },
-            { new: true }
-        );
-
-        res.status(200).json(savedPost);
+        res.status(200).json(sharedPost);
     } 
     catch (error) 
     {

@@ -1,14 +1,13 @@
-import { useState, useRef } from 'react';
 import Navbar from './Navbar';
 import Posts from './Posts';
 
 
-function Home() 
+function Home(props) 
 {
     return (
         <div>
-            <Navbar/>
-            <Posts/>
+            <Navbar user={props.user} socket={props.socket}/>
+            <Posts user={props.user} socket={props.socket}/>
         </div>
     );
 }

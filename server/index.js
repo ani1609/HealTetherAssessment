@@ -2,9 +2,10 @@ const express = require('express');
 const http=require('http');
 require('dotenv').config();
 const cors = require('cors');
+const{ Server }=require('socket.io');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
-const { addPost, fetchPosts } = require('./controllers/postControllers');
+const { addPost, fetchPosts, addComment, sharePost } = require('./controllers/postControllers');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
@@ -14,8 +15,8 @@ const server=http.createServer(app);
 
 // middlewares
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Connect to MongoDB
 connectDb();
@@ -38,6 +39,79 @@ app.use('/uploads', express.static('uploads'));
 //add post
 app.post('/api/addPosts',authenticateJWT, addPost);
 app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
+app.post('/api/addComment',authenticateJWT, addComment);
+app.post('/api/sharePost',authenticateJWT, sharePost);
+
+
+// WebSocket connection handling
+const io=new  Server(server,{
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"],
+    },
+});
+
+io.on('connection', (socket) => 
+{
+    console.log('Client connected');
+
+    socket.on('joinRoom', (roomId) => {
+        try
+        {
+            // Join the new room
+            socket.join(roomId);
+
+            // Emit a message to the room when a user joins
+            io.to(roomId).emit('joinRoom', { message: `Joined room ${roomId}` });
+            console.log(`Socket ${socket.id} joined room ${roomId}`);
+        }
+        catch(error)
+        {
+            console.log('Error joining room',error);
+        }
+    });
+
+    // Handle new post
+    socket.on('newPost', (postData) => 
+    {
+        console.log('New post done');
+        io.emit('newPost', postData);
+    });
+
+    //Handle new post notification
+    socket.on('newPostNotification', (postData) => 
+    {
+        console.log('New post notification done');
+        socket.broadcast.emit('newPostNotification', postData);
+    });
+
+    //Handle post like notification
+    socket.on('likePostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        socket.broadcast.to(roomId).emit('likePostNotification', postData);
+    });
+
+    //Handle new comment notification
+    socket.on('commentPostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        socket.broadcast.to(roomId).emit('commentPostNotification', postData);
+    });
+
+    //Handle new share notificaion
+    socket.on('sharePostNotification', (postData) => 
+    {
+        const roomId = postData.roomId;
+        socket.broadcast.to(roomId).emit('sharePostNotification', postData);
+    });
+
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
 
 
 

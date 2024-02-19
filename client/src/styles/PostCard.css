@@ -1,4 +1,4 @@
-.loginFormContainer, .signupFormContainer, .addPostFormContainer, .notificationComponentContainer
+.commentsComponentContainer
 {
     backdrop-filter: blur(5px);
     opacity: 0;
@@ -20,7 +20,7 @@
     }
 }
 
-.loginFormContainer::before, .signupFormContainer::before, .addPostFormContainer::before, .notificationComponentContainer::before
+commentsComponentContainer::before
 {
     content: '';
     position: absolute;

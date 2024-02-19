@@ -10,6 +10,10 @@ const postSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        personalRoomId: {
+            type: String,
+            required: true,
+        },
     },
     imageData: {
         type: String,
@@ -17,7 +21,6 @@ const postSchema = new mongoose.Schema({
     },
     caption: {
         type: String,
-        required: true,
     },
     likes: {
         type: Number,

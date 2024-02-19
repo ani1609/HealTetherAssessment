@@ -6,7 +6,7 @@ import "../styles/Posts.css";
 
 
 
-function Posts() 
+function Posts(props) 
 {
     const [posts, setPosts] = useState([]);
 
@@ -22,7 +22,7 @@ function Posts()
                 },
             });
             setPosts(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         } 
         catch (error) 
         {
@@ -33,13 +33,31 @@ function Posts()
         fetchPosts();
     }, []); 
 
+    //Listen for new posts
+    useEffect(() => 
+    {
+        const handleNewPost = (postData) => {
+            setPosts((prevPosts) => [postData, ...prevPosts]);
+        };
+    
+        props.socket.on('newPost', handleNewPost);
+    
+        return () => {
+            props.socket.off('newPost', handleNewPost);
+        };
+    }, [props.socket, setPosts]);
+
 
     return (
         <div className='posts-container'>
             <h1 className='font-bold text-3xl text-center mt-4 mb-4'>Posts</h1>
             <div className='post-wrapper flex flex-col justify-center items-center gap-3 max-w-sm w-screen mx-auto border'>
-                {posts.map((post) => (
-                    <PostCard key={post._id} post={post} />
+                {posts.map((post,index) => (
+                    <PostCard key={index}
+                        user={props.user}
+                        post={post} 
+                        socket={props.socket}
+                    />
                 ))}
             </div>
         </div>

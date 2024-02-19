@@ -1,17 +1,72 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../index.css";
 import "../styles/Navbar.css";
 import Login from "./Login";
 import Signup from "./Signup";
 import AddPost from "./AddPost";
+import Notifications from "./Notifications";
 
 
-function Navbar()
+function Navbar(props)
 {
     const userToken=localStorage.getItem("realTimeToken");
     const [showLoginForm, setShowLoginForm] = useState(false);
     const [showSignupForm, setShowSignupForm] = useState(false);
     const [showAddPostForm, setShowAddPostForm] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+
+    //Listen for new posts
+    useEffect(() => 
+    {
+        //Listen for new posts
+        const handleNewPost = (postData) => 
+        {
+            console.log('New post:', postData);
+            let notification="New post from "+postData.creator.name.split(" ")[0];
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        };
+
+        //Listen for new likes
+        const handlePostLike = (postData) => {
+            console.log('New like:', postData);
+
+            const notification = `${postData.likedBy} liked your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+
+        //Listen for new comments
+        const handlePostComment = (postData) => {
+            console.log('New comment:', postData);
+
+            const notification = `${postData.commentedBy} commented on your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+
+        //Listen for new share posts
+        const handlePostShare = (postData) => {
+            console.log('New share:', postData);
+
+            const notification = `${postData.sharedBy} shared your post`;
+            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        }
+
+
+        props.socket.on('newPostNotification', handleNewPost);
+        props.socket.on('likePostNotification', handlePostLike);
+        props.socket.on('commentPostNotification', handlePostComment);
+        props.socket.on('sharePostNotification', handlePostShare);
+        
+
+    
+        return () => {
+            props.socket.off('newPostNotification', handleNewPost);
+            props.socket.off('likePostNotification', handlePostLike);
+            props.socket.off('commentPostNotification', handlePostComment);
+            props.socket.off('sharePostNotification', handlePostShare);
+        };
+    }, [props.socket]);
+
 
     const handleLogOut = () =>
     {
@@ -28,6 +83,7 @@ function Navbar()
                 <div className="flex">
                     {userToken ? (
                         <ul className="flex space-x-4">
+                            <li className="text-white cursor-pointer" onClick={()=>setShowNotification(true)}>Notificaitons</li>
                             <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}>New Post</li>
                             <li className="text-white cursor-pointer" onClick={handleLogOut}>Logout</li>
                         </ul>
@@ -46,7 +102,10 @@ function Navbar()
                 <div className="signupFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Signup setShowSignupForm={setShowSignupForm}/></div>
             }
             {showAddPostForm&&
-                <div className="addPostFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><AddPost setShowAddPostForm={setShowAddPostForm}/></div>
+                <div className="addPostFormContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><AddPost setShowAddPostForm={setShowAddPostForm} user={props.user} socket={props.socket}/></div>
+            }
+            {showNotification&&
+                <div className="notificationComponentContainer w-screen h-screen absolute left-0 z-10 flex justify-center items-center"><Notifications setShowNotification={setShowNotification} notifications={notifications} setNotifications={setNotifications}/></div>
             }
         </nav>
     );

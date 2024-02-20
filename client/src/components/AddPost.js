@@ -67,7 +67,7 @@ function AddPost(props)
 
             // Emit the new post to the server
             socket.emit('newPost', postData);
-            socket.emit('newPostNotification', { postId:postData.postId, postedBy:user.name.split(' ')[0] });
+            socket.emit('newPostNotification', { postId:postData.postId, postedBy:user.name.split(' ')[0], timestamp:postData.timeStamp });
 
             setLoading(false);
             setShowAddPostForm(false);

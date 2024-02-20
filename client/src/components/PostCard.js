@@ -13,8 +13,6 @@ function PostCard(props)
 {
     const {user, post, setPosts, socket} = props;
     const [showComments, setShowComments] = useState(false);
-    const [numbrOfLikes, setNumberOfLikes] = useState();
-    const [numbrOfComments, setNumberOfComments] = useState();
 
 
     function formatTimestamp(timestamp) {
@@ -46,9 +44,6 @@ function PostCard(props)
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
 
             socket.emit('likePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, likedBy:user.name.split(' ')[0], timestamp: new Date() });
-
-            setNumberOfLikes(response.data.likes.length-1);
-            setNumberOfComments(response.data.comments.length);
 
             // props.setLoading(false);
         }

@@ -15,7 +15,7 @@ const addPost = async (req, res) =>
             creator: creator, // Use the creator directly
             imageData,
             caption,
-            likes: 0,
+            likes: [],
             comments: [],
             timeStamp: Date.now(),
             postId

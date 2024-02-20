@@ -16,7 +16,7 @@ function AddPost(props)
         },
         imageData: "",
         caption: "",
-        likes: 0,
+        likes: [],
         comments: [],
         timeStamp: Date.now(),
         postId: uuidv4(),

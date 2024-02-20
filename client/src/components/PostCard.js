@@ -24,7 +24,7 @@ function PostCard(props)
     {
         try
         {
-            props.setLoading(true);
+            // props.setLoading(true);
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -42,12 +42,13 @@ function PostCard(props)
 
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
 
-            socket.emit('likePostNotification', { postData: response.data, roomId: post.creator.personalRoomId, likedBy: user.name });
+            socket.emit('likePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, likedBy:user.name.split(' ')[0] });
 
-            props.setLoading(false);}
+            // props.setLoading(false);
+        }
         catch (error) 
         {
-            props.setLoading(false);
+            // props.setLoading(false);
             console.error('Error liking post:', error);
         }
     }
@@ -69,7 +70,9 @@ function PostCard(props)
                 { headers }
             );
             console.log('Post shared:', response.data);
-            socket.emit('sharePostNotification', { postData: post, roomId: post.creator.personalRoomId, sharedBy: user.name });
+            
+            socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, sharedBy:user.name.split(' ')[0] });
+            
             props.setLoading(false);
         } 
         catch (error) 
@@ -78,6 +81,7 @@ function PostCard(props)
             console.error('Error sharing post:', error);
         }
     }
+
 
     return (
         <div className="flex flex-col box-border" style={{width: "100%"}}>

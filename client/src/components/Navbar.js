@@ -21,35 +21,44 @@ function Navbar(props)
     useEffect(() => 
     {
         //Listen for new posts
-        const handleNewPost = (postData) => 
+        const handleNewPost = (data) => 
         {
-            console.log('New post:', postData);
-            let notification="New post from "+postData.creator.name.split(" ")[0];
-            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+            console.log('New post:', data);
+            const newNotification = {
+                content: `${data.postedBy} created a new post`,
+                postId: data.postId,
+            };
+            setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         };
 
         //Listen for new likes
-        const handlePostLike = (postData) => {
-            console.log('New like:', postData);
-
-            const notification = `${postData.likedBy} liked your post`;
-            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        const handlePostLike = (data) => {
+            console.log('New like:', data);
+            const newNotification = {
+                content: `${data.likedBy} liked your post`,
+                postId: data.postId,
+            };
+            setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }
 
         //Listen for new comments
-        const handlePostComment = (postData) => {
-            console.log('New comment:', postData);
-
-            const notification = `${postData.commentedBy} commented on your post`;
-            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        const handlePostComment = (data) => {
+            console.log('New comment:', data);
+            const newNotification = {
+                content: `${data.commentedBy} commented on your post`,
+                postId: data.postId,
+            };
+            setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }
 
         //Listen for new share posts
-        const handlePostShare = (postData) => {
-            console.log('New share:', postData);
-
-            const notification = `${postData.sharedBy} shared your post`;
-            setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+        const handlePostShare = (data) => {
+            console.log('New share:', data);
+            const newNotification = {
+                content: `${data.sharedBy} shared your post`,
+                postId: data.postId,
+            };
+            setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }
 
 

@@ -27,6 +27,7 @@ function Navbar(props)
             const newNotification = {
                 content: `${data.postedBy} created a new post`,
                 postId: data.postId,
+                timestamp: data.timestamp
             };
             setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         };
@@ -37,6 +38,7 @@ function Navbar(props)
             const newNotification = {
                 content: `${data.likedBy} liked your post`,
                 postId: data.postId,
+                timestamp: data.timestamp
             };
             setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }
@@ -47,6 +49,7 @@ function Navbar(props)
             const newNotification = {
                 content: `${data.commentedBy} commented on your post`,
                 postId: data.postId,
+                timestamp: data.timestamp
             };
             setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }
@@ -57,6 +60,7 @@ function Navbar(props)
             const newNotification = {
                 content: `${data.sharedBy} shared your post`,
                 postId: data.postId,
+                timestamp: data.timestamp
             };
             setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
         }

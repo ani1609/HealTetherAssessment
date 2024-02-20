@@ -4,7 +4,6 @@ import axios from 'axios';
 import "../index"
 import "../styles/Comments.css";
 import {ReactComponent as SendIcon} from "../icons/send.svg";
-import { set } from 'mongoose';
 
 
 
@@ -39,7 +38,7 @@ function Comments(props)
 
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
         
-            socket.emit('commentPostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, commentedBy: user.name.split(' ')[0] });
+            socket.emit('commentPostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, commentedBy: user.name.split(' ')[0], timestamp:post.timeStamp });
 
             setComment('');
 

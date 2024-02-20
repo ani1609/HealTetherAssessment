@@ -11,17 +11,23 @@ function Notifications(props)
         props.setShowNotification(false);
     };
 
-    function formatTimestamp(timestamp) {
-        const options = {
-          hour: 'numeric',
-          minute: 'numeric',
-          hour12: true,
-          month: 'short',
-          year: '2-digit',
+    function formatTimestamp(timestamp) 
+    {
+        const options1 = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
         };
-      
-        const formattedDate = new Date(timestamp).toLocaleDateString('en-US', options);
-        return formattedDate;
+        const formattedTime = new Date(timestamp).toLocaleString('en-US', options1);
+
+        const options2 = {
+            day: '2-digit',
+            month: 'short',
+            year: '2-digit',
+        };
+        const formattedData = new Date(timestamp).toLocaleString('en-US', options2);
+
+        return `${formattedTime} ${formattedData}`;
     }
 
 

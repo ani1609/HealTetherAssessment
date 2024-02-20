@@ -38,7 +38,7 @@ function Comments(props)
 
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
         
-            socket.emit('commentPostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, commentedBy: user.name.split(' ')[0], timestamp:post.timeStamp });
+            socket.emit('commentPostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, commentedBy: user.name.split(' ')[0], timestamp: new Date() });
 
             setComment('');
 

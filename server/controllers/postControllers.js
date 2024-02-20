@@ -52,8 +52,10 @@ const fetchPosts = async (req, res) =>
     }
 };
 
-const addLike = async (req, res) => {
-    try {
+const addLike = async (req, res) => 
+{
+    try 
+    {
         const { postId } = req.body;
         const user = req.user;
 
@@ -156,6 +158,28 @@ const sharePost = async (req, res) =>
     }
 };
 
+const fetchPostById = async (req, res) =>
+{
+    console.log('fetchPostById called');
+    try 
+    {
+        const { postId } = req.body;
+        const post = await Post.findOne({ postId: postId });
+
+        if (!post) 
+        {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        res.status(200).json(post);
+    } 
+    catch (error) 
+    {
+        console.error('Error fetching post:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
 const deleteAllPosts = async (req, res) => 
 {
     try 
@@ -176,5 +200,6 @@ module.exports = {
     addLike,
     addComment,
     sharePost,
+    fetchPostById,
     deleteAllPosts
 };

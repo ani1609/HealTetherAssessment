@@ -1,8 +1,11 @@
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import axios
 import '../styles/App.css';
+import Navbar from './Navbar';
 import Home from './Home';
 import io from 'socket.io-client';
+import NotifiedShare from './NotifiedShare';
 const socket=io.connect("http://localhost:3001");
 
 
@@ -16,10 +19,6 @@ function App()
 
     useEffect(() => 
     {
-        if (userToken)
-        {
-            console.log('User token:', userToken);
-        }
         const fetchUserFromProtectedAPI = async (userToken) => {
         try 
         {
@@ -55,7 +54,7 @@ function App()
     useEffect(() => 
     {
         const handleJoinRoom = (message) => {
-            console.log('Received joinRoom message:', message);
+            // console.log('Received joinRoom message:', message);
         };
 
         socket.on('joinRoom', handleJoinRoom);
@@ -73,7 +72,15 @@ function App()
                     <div className="spinner"></div>
                 </div>
             ) : (
-                <Home user={user} socket={socket} setLoading={setLoading} />
+                <>
+                <BrowserRouter>
+                    <Navbar user={user} socket={socket} setLoading={setLoading} />
+                    <Routes>
+                        <Route path="/" element={<Home user={user} socket={socket} setLoading={setLoading}/>}/>
+                        <Route path="/notifiedShare/:postId" element={<NotifiedShare user={user}/>}/>
+                    </Routes>
+                </BrowserRouter>
+                </>
             )}
         </div>
     );

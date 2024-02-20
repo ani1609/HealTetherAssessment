@@ -7,7 +7,7 @@ function Notifications(props)
     
     const hadleCrossClick = () =>
     {
-        props.setNotifications([]);
+        // props.setNotifications([]);
         props.setShowNotification(false);
     };
 
@@ -30,6 +30,16 @@ function Notifications(props)
         return `${formattedTime} ${formattedData}`;
     }
 
+    const hadleNotiClick = (notification) => () =>
+    {
+        console.log('Notification clicked:', notification);
+        // Assuming /notifiedShare/:postId is the route for NotifiedShare
+        const notifiedShareLink = `/notifiedShare/${notification.postId}`;
+
+        // Open the link in a new tab
+        window.open(notifiedShareLink, '_blank');
+    }
+
 
     return (
         <div className="noti-container bg-white relative p-6 shadow-md rounded-md h-96">
@@ -41,7 +51,7 @@ function Notifications(props)
             </h2>
             <ul className="noti-wrapper border-t overflow-auto">
                 {props.notifications.map((notification, index) => (
-                    <li key={index} className="border-b pt-1 pb-1 flex flex-wrap items-center">
+                    <li key={index} className="border-b pt-1 pb-1 flex flex-wrap items-center cursor-pointer" onClick={hadleNotiClick(notification)}>
                         <p className='text-base font-semibold'>{notification.content.split(' ')[0]}&nbsp;</p>
                         <p className='text-base flex flex-wrap'>{notification.content.split(' ').slice(1).join(' ')}&nbsp;</p>
                         <p className='text-xs ml-auto'>{formatTimestamp(notification.timestamp)}</p>

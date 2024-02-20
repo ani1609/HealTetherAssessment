@@ -6,6 +6,7 @@ const { SECRET_KEY} = process.env;
 
 function authenticateJWT (req, res, next) {
     const authorizationHeader = req.header('Authorization');
+    console.log("it is", authorizationHeader);   
     if (!authorizationHeader) {
         return res.status(401).json({ message: 'Authentication failed: No token provided.' });
     }

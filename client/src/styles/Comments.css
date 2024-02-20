@@ -1,8 +1,8 @@
 .comments-container form 
 {
-    left: 32px;
-    bottom: 32px;
-    width: calc(100% - 64px);
+    left: 24px;
+    bottom: 24px;
+    width: calc(100% - 48px);
 }
 
 .comments-container form input
@@ -13,4 +13,9 @@
 .comments-container form button
 {
     flex: 1;
+}
+
+.comments-wrapper
+{
+    height: 230px;
 }

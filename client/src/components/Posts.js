@@ -8,6 +8,7 @@ import "../styles/Posts.css";
 
 function Posts(props) 
 {
+    const {user, socket, setLoading} = props;
     const [posts, setPosts] = useState([]);
 
     useEffect(() => 
@@ -40,12 +41,42 @@ function Posts(props)
             setPosts((prevPosts) => [postData, ...prevPosts]);
         };
     
-        props.socket.on('newPost', handleNewPost);
+        socket.on('newPost', handleNewPost);
     
         return () => {
-            props.socket.off('newPost', handleNewPost);
+            socket.off('newPost', handleNewPost);
         };
-    }, [props.socket, setPosts]);
+    }, [socket, setPosts]);
+
+    //Listen for new likes
+    useEffect(() => 
+    {
+        const handleIncreaseLikeCount = (data) => {
+            console.log('Like data:', data);
+            setPosts((prevPosts) => prevPosts.map((prevPost) => (prevPost.postId === data.postId ? { ...prevPost, likes: [...prevPost.likes, data.newLike] } : prevPost)));
+        };
+    
+        socket.on('increaseLikeCount', handleIncreaseLikeCount);
+    
+        return () => {
+            socket.off('increaseLikeCount', handleIncreaseLikeCount);
+        };
+    }, [socket, setPosts]);
+
+    //Listen for new comments
+    useEffect(() => 
+    {
+        const handleIncreaseCommentCount = (data) => {
+            console.log('Comments data:', data);
+            setPosts((prevPosts) => prevPosts.map((prevPost) => (prevPost.postId === data.postId ? { ...prevPost, comments: [...prevPost.comments, data.newComment] } : prevPost)));
+        };
+    
+        socket.on('increaseCommentCount', handleIncreaseCommentCount);
+    
+        return () => {
+            socket.off('increaseCommentCount', handleIncreaseCommentCount);
+        };
+    }, [socket, setPosts]);
 
 
     return (
@@ -54,11 +85,11 @@ function Posts(props)
             <div className='post-wrapper flex flex-col justify-center items-center gap-3 max-w-sm w-screen mx-auto border'>
                 {posts.length>0 && posts.map((post,index) => (
                     <PostCard key={index}
-                        user={props.user}
+                        user={user}
                         post={post} 
                         setPosts={setPosts}
-                        socket={props.socket}
-                        setLoading={props.setLoading}
+                        socket={socket}
+                        setLoading={setLoading}
                     />
                 ))}
             </div>

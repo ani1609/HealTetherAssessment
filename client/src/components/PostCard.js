@@ -41,10 +41,17 @@ function PostCard(props)
             );
             console.log('Updated post:', response.data);
 
-            setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
+            // setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
 
             socket.emit('likePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, likedBy:user.name.split(' ')[0], timestamp: new Date() });
-
+            const newLike = {
+                creator: {
+                    name: user.name,
+                    email: user.email,
+                },
+                timeStamp: Date.now(),
+            }
+            socket.emit('increaseLikeCount', { postId: post.postId, newLike });
             // props.setLoading(false);
         }
         catch (error) 

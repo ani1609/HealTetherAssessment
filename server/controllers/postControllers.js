@@ -56,9 +56,6 @@ const addLike = async (req, res) => {
     try {
         const { postId } = req.body;
         const user = req.user;
-        console.log(user.email);
-
-        console.log('Add like request:', { postId });
 
         // Find the post by postId
         const post = await Post.findOne({ postId: postId });
@@ -95,8 +92,6 @@ const addComment = async (req, res) =>
     {
         const { content, postId } = req.body;
         const user=req.user;
-
-        console.log('Add comment request:', { content, postId });
 
        // Find the post by postId
        const post = await Post.findOne({ postId: postId });

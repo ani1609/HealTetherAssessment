@@ -16,7 +16,7 @@ function Notifications(props)
             <h2 className="flex justify-center text-2xl font-bold mb-6">Notifications</h2>
             <div className="mb-4 border-t">
                 {props.notifications.map((notification, index) => (
-                    <p key={index} className="border-b pt-1 pb-1">{notification}</p>
+                    <p key={index} className="border-b pt-1 pb-1">{notification.content}</p>
                 ))}
             </div>
         </div>

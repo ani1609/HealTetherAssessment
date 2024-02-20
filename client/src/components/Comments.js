@@ -4,12 +4,13 @@ import axios from 'axios';
 import "../index"
 import "../styles/Comments.css";
 import {ReactComponent as SendIcon} from "../icons/send.svg";
+import { set } from 'mongoose';
 
 
 
 function Comments(props)
 {
-    const { post, setPosts, socket, user } = props;
+    const { post, setPosts, socket, user, setShowComments } = props;
     const [comment, setComment] = useState('');
 
     const handleAddComment = async (event) => 
@@ -19,7 +20,7 @@ function Comments(props)
             return;
         try
         {
-            props.setLoading(true);
+            // props.setLoading(true);
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -38,15 +39,17 @@ function Comments(props)
 
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
         
-            socket.emit('commentPostNotification', { postData: response.data, roomId: post.creator.personalRoomId, commentedBy: user.name });
-            
+            socket.emit('commentPostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, commentedBy: user.name.split(' ')[0] });
+
             setComment('');
 
-            props.setLoading(false);
+            setShowComments(false);
+
+            // props.setLoading(false);
         }
         catch (error) 
         {
-            props.setLoading(false);
+            // props.setLoading(false);
             console.error('Error adding comment:', error);
         }
     };
@@ -54,8 +57,12 @@ function Comments(props)
 
     return(
         <div className="comments-container bg-white relative p-8 shadow-md rounded-md w-80 h-96">
-            <div className="absolute cursor-pointer p-2" style={{right: "10px", top:"10px"}} onClick={()=>props.setShowComments(false)}><Close className="w-5 h-5"/></div>
-            <h2 className="flex justify-center text-2xl font-bold mb-6">Comments</h2>
+            <div className="absolute cursor-pointer p-2" style={{right: "10px", top:"10px"}} onClick={()=>setShowComments(false)}>
+                <Close className="w-5 h-5"/>
+            </div>
+            <h2 className="flex justify-center text-2xl font-bold mb-6">
+                Comments
+            </h2>
             <div className="mb-4 border-t">
                 {post && post.comments.map((comment, index) => (
                     <p key={index} className="border-b pt-1 pb-1">{comment.content}</p>

@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 function AddPost(props) 
 {
+    const { user, socket, setShowAddPostForm, setLoading } = props;
+
     const [postData, setPostData] = useState({
         creator: {
             name: props.user.name,
@@ -43,7 +45,7 @@ function AddPost(props)
     const handleSubmit = async (event) => 
     {
         event.preventDefault();
-        props.setLoading(true);
+        setLoading(true);
         try 
         {
             const userToken = localStorage.getItem('realTimeToken'); // Get your JWT token from storage
@@ -64,15 +66,15 @@ function AddPost(props)
             console.log('Post created:', response.data);
 
             // Emit the new post to the server
-            props.socket.emit('newPost', postData);
-            props.socket.emit('newPostNotification', postData);
+            socket.emit('newPost', postData);
+            socket.emit('newPostNotification', { postId:postData.postId, postedBy:user.name.split(' ')[0] });
 
-            props.setLoading(false);
-            props.setShowAddPostForm(false);
+            setLoading(false);
+            setShowAddPostForm(false);
         }
         catch (error) 
         {
-            props.setLoading(false);
+            setLoading(false);
             console.error('Error creating post:', error);
         }
     };
@@ -85,8 +87,12 @@ function AddPost(props)
 
     return (
         <form className="bg-white relative p-8 shadow-md rounded-md w-80" onSubmit={handleSubmit}>
-            <div className="absolute cursor-pointer p-2" style={{right: "10px", top:"10px"}} onClick={()=>props.setShowAddPostForm(false)}><Close className="w-5 h-5"/></div>
-            <h2 className="flex justify-center text-2xl font-bold mb-6">Create Post</h2>
+            <div className="absolute cursor-pointer p-2" style={{right: "10px", top:"10px"}} onClick={()=>props.setShowAddPostForm(false)}>
+                <Close className="w-5 h-5"/>
+            </div>
+            <h2 className="flex justify-center text-2xl font-bold mb-6">
+                Create Post
+            </h2>
             <div className="mb-4">
                 <label htmlFor="image" className="block text-sm font-medium text-gray-600">
                 Image:

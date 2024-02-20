@@ -82,31 +82,28 @@ io.on('connection', (socket) =>
     });
 
     //Handle new post notification
-    socket.on('newPostNotification', (postData) => 
+    socket.on('newPostNotification', (data) => 
     {
         console.log('New post notification done');
-        socket.broadcast.emit('newPostNotification', postData);
+        socket.broadcast.emit('newPostNotification', data);
     });
 
     //Handle post like notification
-    socket.on('likePostNotification', (postData) => 
+    socket.on('likePostNotification', (data) => 
     {
-        const roomId = postData.roomId;
-        socket.broadcast.to(roomId).emit('likePostNotification', postData);
+        socket.broadcast.to(data.roomId).emit('likePostNotification', data);
     });
 
     //Handle new comment notification
-    socket.on('commentPostNotification', (postData) => 
+    socket.on('commentPostNotification', (data) => 
     {
-        const roomId = postData.roomId;
-        socket.broadcast.to(roomId).emit('commentPostNotification', postData);
+        socket.broadcast.to(data.roomId).emit('commentPostNotification', data);
     });
 
     //Handle new share notificaion
-    socket.on('sharePostNotification', (postData) => 
+    socket.on('sharePostNotification', (data) => 
     {
-        const roomId = postData.roomId;
-        socket.broadcast.to(roomId).emit('sharePostNotification', postData);
+        socket.broadcast.to(data.roomId).emit('sharePostNotification', data);
     });
 
 

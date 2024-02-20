@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../index.css";
 import "../styles/PostCard.css";
-import {ReactComponent as LikeIcon} from "../icons/like.svg";
+import {ReactComponent as LikeIcon} from "../icons/like2.svg";
 import {ReactComponent as CommentIcon} from "../icons/comment.svg";
 import {ReactComponent as ShareIcon} from "../icons/share.svg";
 import Comments from "./Comments";
@@ -42,7 +42,7 @@ function PostCard(props)
 
             setPosts(prevPosts => prevPosts.map(prevPost => (prevPost.postId === post.postId ? response.data : prevPost)));
 
-            socket.emit('likePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, likedBy:user.name.split(' ')[0], timestamp:post.timeStamp });
+            socket.emit('likePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, likedBy:user.name.split(' ')[0], timestamp: new Date() });
 
             // props.setLoading(false);
         }
@@ -71,7 +71,7 @@ function PostCard(props)
             );
             console.log('Post shared:', response.data);
             
-            socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, sharedBy:user.name.split(' ')[0], timestamp:post.timeStamp});
+            socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, sharedBy:user.name.split(' ')[0], timestamp: new Date() });
             
             // props.setLoading(false);
         } 
@@ -111,5 +111,6 @@ function PostCard(props)
         </div>
     );
 }
+
 
 export default PostCard;

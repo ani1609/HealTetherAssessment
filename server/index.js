@@ -5,7 +5,7 @@ const cors = require('cors');
 const{ Server }=require('socket.io');
 const connectDb = require('./configDB/mongoDB');
 const {login, signup, getUser} = require('./controllers/userControllers');
-const { addPost, fetchPosts, addLike, addComment, sharePost, deleteAllPosts } = require('./controllers/postControllers');
+const { addPost, fetchPosts, addLike, addComment, sharePost, fetchPostById, deleteAllPosts } = require('./controllers/postControllers');
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
@@ -44,6 +44,7 @@ app.get('/api/fetchPosts',authenticateJWT, fetchPosts);
 app.post('/api/addLike',authenticateJWT, addLike);
 app.post('/api/addComment',authenticateJWT, addComment);
 app.post('/api/sharePost',authenticateJWT, sharePost);
+app.post('/api/fetchPostById',authenticateJWT, fetchPostById);
 
 
 // WebSocket connection handling
@@ -58,33 +59,24 @@ io.on('connection', (socket) =>
 {
     console.log('Client connected');
 
-    socket.on('joinRoom', (roomId) => {
-        try
-        {
-            // Join the new room
-            socket.join(roomId);
+    socket.on('joinRoom', (roomId) => 
+    {
+         // Join the new room
+         socket.join(roomId);
 
-            // Emit a message to the room when a user joins
-            io.to(roomId).emit('joinRoom', { message: `Joined room ${roomId}` });
-            console.log(`Socket ${socket.id} joined room ${roomId}`);
-        }
-        catch(error)
-        {
-            console.log('Error joining room',error);
-        }
+         // Emit a message to the room when a user joins
+         io.to(roomId).emit('joinRoom', { message: `Joined room ${roomId}` });
     });
 
     // Handle new post
     socket.on('newPost', (postData) => 
     {
-        console.log('New post done');
         io.emit('newPost', postData);
     });
 
     //Handle new post notification
     socket.on('newPostNotification', (data) => 
     {
-        console.log('New post notification done');
         socket.broadcast.emit('newPostNotification', data);
     });
 

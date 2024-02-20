@@ -98,7 +98,7 @@ function Navbar(props)
                 <div className="flex">
                     {userToken ? (
                         <ul className="flex jsutify-center items-center space-x-4">
-                            <li className="text-white cursor-pointer relative" onClick={()=>setShowNotification(true)}>{notifications.length > 0 && <span className="dot"></span>}<BellIcon className="fill-white w-10"/></li>
+                            <li className="text-white cursor-pointer relative" onClick={()=>setShowNotification(true)}>{notifications.length > 0 && <span className="dot flex justify-center items-center text-sm p-2">{notifications.length}</span>}<BellIcon className="fill-white w-10"/></li>
                             <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}>New Post</li>
                             <li className="text-white cursor-pointer" onClick={handleLogOut}>Logout</li>
                         </ul>

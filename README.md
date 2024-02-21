@@ -46,3 +46,5 @@ Before you begin, make sure you have the following software installed on your sy
 9. Create User accounts with required given details
 
 10. Test for the features after succesfull account creation
+
+Note: Use images of size <=1mb

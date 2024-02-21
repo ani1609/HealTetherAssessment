@@ -1,7 +1,6 @@
 const { Post } = require('../models/post');
 const { User } = require('../models/user');
 require('dotenv').config();
-const { v4: uuidv4 } = require('uuid');
 
 
 const addPost = async (req, res) => 
@@ -15,7 +14,7 @@ const addPost = async (req, res) =>
             creator: creator, // Use the creator directly
             imageData,
             caption,
-            likes: 0,
+            likes: [],
             comments: [],
             timeStamp: Date.now(),
             postId
@@ -54,6 +53,7 @@ const fetchPosts = async (req, res) =>
 
 const addLike = async (req, res) => 
 {
+    console.log("hit like this");
     try 
     {
         const { postId } = req.body;
@@ -90,6 +90,7 @@ const addLike = async (req, res) =>
 
 const addComment = async (req, res) => 
 {
+    console.log("hit");
     try 
     {
         const { content, postId } = req.body;
@@ -130,7 +131,6 @@ const sharePost = async (req, res) =>
     {
         const postData = req.body;
         const user=req.user;
-        const randomUUID = uuidv4();
 
         const newPost = new Post({
             creator: 
@@ -144,7 +144,7 @@ const sharePost = async (req, res) =>
             likes: 0,
             comments: [],
             timeStamp: Date.now(),
-            postId: randomUUID,
+            postId: postData.postId,
         });
 
         const sharedPost = await newPost.save();

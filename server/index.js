@@ -98,6 +98,18 @@ io.on('connection', (socket) =>
         socket.broadcast.to(data.roomId).emit('sharePostNotification', data);
     });
 
+    //Increase like count
+    socket.on('increaseLikeCount', (data) => 
+    {
+        io.emit('increaseLikeCount', data);
+    });
+
+    //Increase comment count
+    socket.on('increaseCommentCount', (data) => 
+    {
+        io.emit('increaseCommentCount', data);
+    });
+
 
     // Handle disconnection
     socket.on('disconnect', () => {

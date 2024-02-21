@@ -76,8 +76,8 @@ function App()
                 <BrowserRouter>
                     <Navbar user={user} socket={socket} setLoading={setLoading} />
                     <Routes>
-                        <Route path="/" element={<Home user={user} socket={socket} setLoading={setLoading}/>}/>
-                        <Route path="/notifiedShare/:postId" element={<NotifiedShare user={user}/>}/>
+                        {userToken && <Route path="/" element={<Home user={user} socket={socket} setLoading={setLoading}/>}/>}
+                        {userToken && <Route path="/notifiedShare/:postId" element={<NotifiedShare user={user}/>}/>}
                     </Routes>
                 </BrowserRouter>
                 </>

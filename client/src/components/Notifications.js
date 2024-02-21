@@ -7,7 +7,7 @@ function Notifications(props)
     
     const hadleCrossClick = () =>
     {
-        // props.setNotifications([]);
+        props.setNotifications([]);
         props.setShowNotification(false);
     };
 

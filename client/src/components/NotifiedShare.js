@@ -29,7 +29,7 @@ function NotifiedShare(props)
                     },
                     { headers }
                 );
-                // console.log('Post:', response.data);
+                console.log('Shared Post:', response.data);
                 setPost(response.data);
             }
             catch (error) 

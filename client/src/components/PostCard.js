@@ -95,7 +95,7 @@ function PostCard(props)
             console.log('Post shared:', response.data);
 
             socket.emit('newPost', postData);
-            socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, sharedBy:user.name.split(' ')[0], timestamp: new Date() });
+            socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: postData.postId, sharedBy:user.name.split(' ')[0], timestamp: new Date() });
             
             // props.setLoading(false);
         } 

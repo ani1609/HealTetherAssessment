@@ -65,6 +65,7 @@ function Signup(props)
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border rounded-md"
                 required
+                autoComplete="off"
                 />
             </div>
             <div className="mb-4">
@@ -79,6 +80,7 @@ function Signup(props)
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border rounded-md"
                 required
+                autoComplete="off"
                 />
             </div>
             <div className="mb-4">

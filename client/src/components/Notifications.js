@@ -50,13 +50,17 @@ function Notifications(props)
                 Notifications
             </h2>
             <ul className="noti-wrapper border-t overflow-auto">
-                {props.notifications.map((notification, index) => (
-                    <li key={index} className="border-b pt-1 pb-1 flex flex-wrap items-center cursor-pointer" onClick={hadleNotiClick(notification)}>
-                        <p className='text-base font-semibold'>{notification.content.split(' ')[0]}&nbsp;</p>
-                        <p className='text-base flex flex-wrap'>{notification.content.split(' ').slice(1).join(' ')}&nbsp;</p>
-                        <p className='text-xs ml-auto'>{formatTimestamp(notification.timestamp)}</p>
-                    </li>
-                ))}
+                {props.notifications.length === 0 ? (
+                    <li className="text-center text-gray-500 py-2">No notifications</li>
+                ) : (
+                    props.notifications.map((notification, index) => (
+                        <li key={index} className="border-b pt-1 pb-1 flex flex-wrap items-center cursor-pointer" onClick={hadleNotiClick(notification)}>
+                            <p className='text-base font-semibold'>{notification.content.split(' ')[0]}&nbsp;</p>
+                            <p className='text-base flex flex-wrap'>{notification.content.split(' ').slice(1).join(' ')}&nbsp;</p>
+                            <p className='text-xs ml-auto'>{formatTimestamp(notification.timestamp)}</p>
+                        </li>
+                    ))
+                )}
             </ul>
         </div>
     );

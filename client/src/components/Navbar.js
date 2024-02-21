@@ -6,6 +6,8 @@ import Signup from "./Signup";
 import AddPost from "./AddPost";
 import Notifications from "./Notifications";
 import {ReactComponent as BellIcon} from "../icons/bell.svg";
+import {ReactComponent as AddPostIcon} from "../icons/addPost.svg";
+import {ReactComponent as LogoutIcon} from "../icons/logout.svg";
 
 
 function Navbar(props)
@@ -94,18 +96,19 @@ function Navbar(props)
     return (
         <nav className="bg-gray-800 p-4">
             <div className="container mx-auto flex justify-between items-center">
-                <div className="text-white font-bold text-xl">HealTether</div>
+                <div className="text-white font-bold text-2xl">HealTether</div>
+                {userToken && <p className="text-lg text-white">{props.user?.name?.split(' ')[0]}</p>}
                 <div className="flex">
                     {userToken ? (
-                        <ul className="flex jsutify-center items-center space-x-4">
-                            <li className="text-white cursor-pointer relative" onClick={()=>setShowNotification(true)}>{notifications.length > 0 && <span className="dot flex justify-center items-center text-sm p-2">{notifications.length}</span>}<BellIcon className="fill-white w-10"/></li>
-                            <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}>New Post</li>
-                            <li className="text-white cursor-pointer" onClick={handleLogOut}>Logout</li>
+                        <ul className="flex jsutify-center items-center space-x-8">
+                            <li className="text-white cursor-pointer relative" onClick={()=>setShowNotification(true)}>{notifications.length > 0 && <span className="dot flex justify-center items-center text-sm p-2">{notifications.length}</span>}<BellIcon className="fill-white w-8"/></li>
+                            <li className="text-white cursor-pointer" onClick={()=>setShowAddPostForm(true)}><AddPostIcon className="fill-white w-8"/></li>
+                            <li className="text-white cursor-pointer" onClick={handleLogOut}><LogoutIcon className="fill-white w-8" style={{height:"48px"}}/></li>
                         </ul>
                     ) : (
-                        <ul className="flex space-x-4">
-                            <li className="text-white cursor-pointer" onClick={()=>{setShowLoginForm(true); setShowSignupForm(false)}}>Login</li>
-                            <li className="text-white cursor-pointer" onClick={()=>{setShowSignupForm(true); setShowLoginForm(false)}}>Signup</li>
+                        <ul className="flex space-x-8">
+                            <li className="text-white cursor-pointer border border-slate-500 p-2 rounded" onClick={()=>{setShowLoginForm(true); setShowSignupForm(false)}}>Login</li>
+                            <li className="text-white cursor-pointer border border-slate-500 p-2 rounded" onClick={()=>{setShowSignupForm(true); setShowLoginForm(false)}}>Signup</li>
                         </ul>
                     )}
                 </div>

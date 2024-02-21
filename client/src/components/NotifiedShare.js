@@ -29,7 +29,7 @@ function NotifiedShare(props)
                     },
                     { headers }
                 );
-                // console.log('Post:', response.data);
+                console.log('Shared Post:', response.data);
                 setPost(response.data);
             }
             catch (error) 
@@ -73,7 +73,7 @@ function NotifiedShare(props)
                     <img src={post.imageData} alt="post" className="w-full h-60 object-cover mt-1" />
                     <div className="flex justify-between items-center cursor-pointer mt-1">
                         <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
-                            <LikeIcon className="h-6 w-6"/> <p className="text-xs">{post.likes.length-1 === 0 ? '0 Like' : `${post.likes.length-1} Likes`}</p>
+                            <LikeIcon className="h-6 w-6"/> <p className="text-xs">{post.likes.length <= 1 ? `${post.likes.length} Like` : `${post.likes.length} Likes`}</p>
                         </span>
                         <span className="flex justify-center box-border p-2 gap-x-2 items-center" style={{ flex: 1 }}>
                             <CommentIcon className="h-5 w-5"/> <p className="text-xs">{post.comments.length} Comment</p>

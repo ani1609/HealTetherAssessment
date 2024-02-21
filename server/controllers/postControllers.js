@@ -141,7 +141,7 @@ const sharePost = async (req, res) =>
             },
             imageData: postData.imageData,
             caption: postData.caption,
-            likes: 0,
+            likes: [],
             comments: [],
             timeStamp: Date.now(),
             postId: postData.postId,

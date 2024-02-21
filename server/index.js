@@ -9,7 +9,6 @@ const { addPost, fetchPosts, addLike, addComment, sharePost, fetchPostById, dele
 const authenticateJWT = require('./middlewares/authenticateJWT');
 
 
-
 const app = express();
 const server=http.createServer(app);
 

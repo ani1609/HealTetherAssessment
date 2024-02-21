@@ -45,7 +45,7 @@ function AddPost(props)
     const handleSubmit = async (event) => 
     {
         event.preventDefault();
-        setLoading(true);
+        // setLoading(true);
         try 
         {
             const userToken = localStorage.getItem('realTimeToken'); // Get your JWT token from storage
@@ -69,12 +69,12 @@ function AddPost(props)
             socket.emit('newPost', postData);
             socket.emit('newPostNotification', { postId:postData.postId, postedBy:user.name.split(' ')[0], timestamp:postData.timeStamp });
 
-            setLoading(false);
+            // setLoading(false);
             setShowAddPostForm(false);
         }
         catch (error) 
         {
-            setLoading(false);
+            // setLoading(false);
             console.error('Error creating post:', error);
         }
     };

@@ -6,7 +6,8 @@ import {ReactComponent as CommentIcon} from "../icons/comment.svg";
 import {ReactComponent as ShareIcon} from "../icons/share.svg";
 import Comments from "./Comments";
 import axios from 'axios';
-import { set } from "mongoose";
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 function PostCard(props) 
@@ -66,6 +67,20 @@ function PostCard(props)
         try 
         {
             // props.setLoading(true);
+            const postData = {
+                creator: {
+                    name: props.user.name,
+                    email: props.user.email,
+                    personalRoomId: props.user._id,
+                },
+                imageData: post.imageData,
+                caption: post.caption,
+                likes: [],
+                comments: [],
+                timeStamp: Date.now(),
+                postId: uuidv4(),
+            };
+
             const userToken = localStorage.getItem('realTimeToken'); 
             const headers = {
                 Authorization: `Bearer ${userToken}`,
@@ -74,11 +89,12 @@ function PostCard(props)
     
             // Make a POST request to the backend with the comment, post ID, and token
             const response = await axios.post('http://localhost:3001/api/sharePost',
-                post,
+                postData,
                 { headers }
             );
             console.log('Post shared:', response.data);
-            
+
+            socket.emit('newPost', postData);
             socket.emit('sharePostNotification', { roomId: post.creator.personalRoomId, postId: post.postId, sharedBy:user.name.split(' ')[0], timestamp: new Date() });
             
             // props.setLoading(false);
